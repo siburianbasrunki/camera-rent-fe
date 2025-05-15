@@ -8,6 +8,8 @@ import CameraDetail from "./pages/Camera/DetailCamera";
 import CameraListPage from "./pages/Camera/ListCamera";
 import { CreateBooking } from "./pages/booking/CreateBooking";
 import { BalancePage } from "./pages/balance/balance";
+import { LoginPage } from "./pages/login";
+import { RegisterPage } from "./pages/register";
 
 const App = () => {
   return (
@@ -16,6 +18,8 @@ const App = () => {
         <div className="max-w-md mx-auto min-h-screen flex flex-col shadow-xl">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginPage/>} />
+            <Route path="/register" element={<RegisterPage/>} />
             <Route path="/camera" element={<CameraListPage />} />
             <Route path="/camera/:id" element={<CameraDetail />} />
             <Route path="/booking/*" element={<BookingPage />} />

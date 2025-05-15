@@ -6,7 +6,7 @@ const CameraListPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="p-4">
+    <div className="p-4 h-screen">
       <h1 className="text-2xl font-bold mb-6 text-gray-800">Daftar Kamera Tersedia</h1>
       <div>
         <div className="mb-4">
@@ -17,11 +17,11 @@ const CameraListPage = () => {
           />
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1  gap-6">
         {CameraData.map((camera) => (
           <div
             key={camera.id}
-            className="border border-gray-300 rounded-lg overflow-hidden shadow hover:shadow-lg transition"
+            className="border border-gray-300 rounded-lg overflow-hidden shadow hover:shadow-lg transition "
           >
             <div className="flex gap-4 p-4">
               <img
