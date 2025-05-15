@@ -1,8 +1,10 @@
 import { BiSolidEdit } from "react-icons/bi";
 import { FaClipboardList } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const navigate = useNavigate();
   return (
     <div className=" bg-white">
       <div className="max-w-md mx-auto min-h-screen flex flex-col shadow-xl">
@@ -33,7 +35,7 @@ const Profile = () => {
         <hr className="border-gray-300" />
 
         <div className="w-full px-4">
-          <div className="flex items-center gap-2 p-3 justify-between">
+          <div className="flex items-center gap-2 p-3 justify-between" onClick={() => navigate("/booking")}>
             <div className="flex items-center gap-2">
               <div className="p-2 bg-gray-100 rounded-xl">
                 <FaClipboardList className="w-6 h-6 text-gray-600" />

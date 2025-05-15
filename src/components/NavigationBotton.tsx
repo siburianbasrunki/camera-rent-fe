@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import {
   FaHome,
-  FaSearch,
   FaCameraRetro,
   FaClipboardList,
   FaUser,
 } from "react-icons/fa";
+import { MdCreditCard } from "react-icons/md";
 
 const BottomNav = () => {
   return (
@@ -16,13 +16,13 @@ const BottomNav = () => {
             <Link to="/" className="p-2 text-gray-600 hover:text-indigo-600">
               <FaHome className="w-6 h-6" />
             </Link>
-            <Link to="/" className="p-2 text-gray-600 hover:text-indigo-600">
-              <FaSearch className="w-6 h-6" />
+            <Link to="/balance" className="p-2 text-gray-600 hover:text-indigo-600">
+              <MdCreditCard className="w-6 h-6" />
             </Link>
 
             <div className="relative -mt-12">
               <Link
-                to="/"
+                to="/camera"
                 className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-lg hover:from-indigo-700 hover:to-blue-700 transition-all"
               >
                 <FaCameraRetro className="w-8 h-8" />
