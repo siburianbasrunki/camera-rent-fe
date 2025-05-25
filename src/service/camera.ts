@@ -1,11 +1,11 @@
-// src/service/camera.ts
 import { getEndpoints } from "../config/config";
 import type { Camera, DetailCamera } from "../model/camera";
 
 const CameraService = {
-  async getCameras(): Promise<Camera[]> {
+  async getCameras(searchTerm?: string): Promise<Camera[]> {
     const { camera } = getEndpoints();
-    const res = await fetch(camera);
+    const url = searchTerm ? `${camera}?search=${searchTerm}` : camera;
+    const res = await fetch(url);
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const json = await res.json();
     return json.data || [];
