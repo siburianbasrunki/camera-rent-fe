@@ -1,6 +1,8 @@
 import { FaArrowRight } from "react-icons/fa";
-import { BrandData } from "../../store/brand";
+import { useBrand } from "../../hook/brand";
 export const BrandSection = () => {
+  const { brands } = useBrand();
+
   return (
     <>
       <div className="p-2 ">
@@ -10,13 +12,13 @@ export const BrandSection = () => {
         </div>
         <div>
           <div className="grid grid-cols-3 gap-4 ">
-            {BrandData.map((brand) => (
+            {brands.map((brand) => (
               <div
                 key={brand.id}
                 className="bg-gradient-to-t from-white/80 to-transparent rounded-xl p-4 flex flex-col items-center shadow-md hover:scale-[1.02] transition-transform duration-200 border border-gray-300"
               >
                 <img
-                  src={brand.image}
+                  src={brand.imageUrl}
                   alt={brand.name}
                   className="w-20 h-20 rounded-md"
                 />

@@ -1,9 +1,11 @@
 import { FaArrowRight } from "react-icons/fa";
 import { formatRupiah } from "../../helper/formatRupiah";
-import { CameraData } from "../../store/brand";
 import { useNavigate } from "react-router-dom";
+import { useCamera } from "../../hook/camera";
 
 export const CameraSection = () => {
+  const { cameras } = useCamera();
+
   const navigate = useNavigate();
   return (
     <div className="p-4">
@@ -13,14 +15,14 @@ export const CameraSection = () => {
       </div>
 
       <div className="grid grid-cols-1  gap-6">
-        {CameraData.map((camera) => (
+        {cameras.map((camera) => (
           <div
             key={camera.id}
             className="bg-white rounded-2xl shadow hover:shadow-lg transition duration-300 border border-gray-200 flex flex-col"
           >
             <div className="flex justify-center items-center p-4">
               <img
-                src={camera.image}
+                src={camera.imageUrl}
                 alt={camera.name}
                 className="w-48 h-48 object-cover rounded-md"
               />
