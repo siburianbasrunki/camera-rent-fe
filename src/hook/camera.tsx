@@ -1,28 +1,22 @@
-import { useEffect, useState } from "react";
-import type { Camera } from "../model/camera";
+import { useQuery } from "@tanstack/react-query";
 import CameraService from "../service/camera";
+import { useParams } from "react-router-dom";
 
 export const useCamera = () => {
-  const [cameras, setCameras] = useState<Camera[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  return useQuery({
+    queryKey: ['cameras'],
+    queryFn: CameraService.getCameras,
+  });
+};
 
-  useEffect(() => {
-    const fetchCameras = async () => {
-      setLoading(true);
-      try {
-        const cameraData = await CameraService.getCameras();
-        setCameras(cameraData);
-        setError(null);
-      } catch (err: any) {
-        setError(err.message);
-        console.error("Fetch error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCameras();
-  }, []);
-
-  return { cameras, loading, error };
+export const useCameraById = () => {
+  const { id } = useParams<{ id: string }>();
+  return useQuery({
+    queryKey: ['cameras', id],
+    queryFn: () => {
+      if (!id) throw new Error('No ID provided');
+      return CameraService.getCameraById(id);
+    },
+    enabled: !!id,
+  });
 };

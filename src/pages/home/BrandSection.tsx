@@ -1,7 +1,13 @@
 import { FaArrowRight } from "react-icons/fa";
 import { useBrand } from "../../hook/brand";
+import { EmptyState } from "../../components/EmptyState";
+import { CardSkeleton } from "../../components/Skeleton";
+
 export const BrandSection = () => {
-  const { brands } = useBrand();
+  const { data: brands, isLoading, isError, error } = useBrand();
+
+  if (isLoading) return <CardSkeleton />;
+  if (isError) return <EmptyState title={error.message} />;
 
   return (
     <>
@@ -12,7 +18,7 @@ export const BrandSection = () => {
         </div>
         <div>
           <div className="grid grid-cols-3 gap-4 ">
-            {brands.map((brand) => (
+            {brands?.map((brand) => (
               <div
                 key={brand.id}
                 className="bg-gradient-to-t from-white/80 to-transparent rounded-xl p-4 flex flex-col items-center shadow-md hover:scale-[1.02] transition-transform duration-200 border border-gray-300"
