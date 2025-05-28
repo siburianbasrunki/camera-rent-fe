@@ -5,5 +5,6 @@ export function getEndpoints() {
     brand: `${BASE_URL}/brands`,
     camera: `${BASE_URL}/cameras`,
     banner: `${BASE_URL}/banner`,
+    auth: `${BASE_URL}/auth`,
   };
 }

@@ -8,7 +8,7 @@ const CameraDetail = () => {
  const { data: camera, isLoading, isError, error } = useCameraById();
 
   const navigate = useNavigate();
-  if (isLoading) return <CardSkeleton />;
+  if (isLoading) return <CardSkeleton height="h-screen"/>;
   if (isError) return <EmptyState title={error.message} />;
 
 

@@ -22,7 +22,7 @@ const CameraListPage = () => {
     }
   }, [debouncedSearchTerm, setSearchParams]);
 
-  if (isLoading) return <CardSkeleton />;
+  if (isLoading) return <CardSkeleton height="h-screen" />;
   if (isError) return <EmptyState title={error.message} />;
 
   return (

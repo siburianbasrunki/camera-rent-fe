@@ -8,6 +8,8 @@ import { EmptyState } from "../../components/EmptyState";
 export const CameraSection = () => {
   const navigate = useNavigate();
   const { data: cameras, isLoading, isError, error } = useCamera();
+ 
+  
 
   if (isLoading) return <CardSkeleton />;
   if (isError) return <EmptyState title={error.message} />;
