@@ -6,5 +6,6 @@ export function getEndpoints() {
     camera: `${BASE_URL}/cameras`,
     banner: `${BASE_URL}/banner`,
     auth: `${BASE_URL}/auth`,
+    user: `${BASE_URL}/users`,
   };
 }

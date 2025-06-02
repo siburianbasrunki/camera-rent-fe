@@ -4,10 +4,13 @@ import { IoIosArrowForward } from "react-icons/io";
 import { IoLogOutOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useUserById } from "../../hook/user";
 
 const Profile = () => {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
+  const { data } = useUserById();
+  console.log("data", data);
 
   const handleLogout = () => {
     logout();
@@ -23,15 +26,17 @@ const Profile = () => {
         <div className="w-full px-4 flex justify-between items-center">
           <div className="flex items-center gap-2 p-3">
             <img
-              src="https://images.unsplash.com/photo-1499714608240-22fc6ad53fb2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              src={data?.imageUrl || ""}
               alt="user"
               className="w-15 h-15 rounded-lg"
             />
             <div>
               <p className="text-lg font-semibold leading-6 text-black">
-                {user?.name || "Basrunki Siburian"}
+                {user?.name || "-"}
               </p>
-              <p className="text-md  leading-5 text-black">Freelance</p>
+              <p className="text-md  leading-5 text-black">
+                {user?.email || "-"}
+              </p>
             </div>
           </div>
           <div>
@@ -44,8 +49,8 @@ const Profile = () => {
         <hr className="border-gray-300" />
 
         <div className="w-full px-4">
-          <div 
-            className="flex items-center gap-2 p-3 justify-between cursor-pointer hover:bg-gray-50" 
+          <div
+            className="flex items-center gap-2 p-3 justify-between cursor-pointer hover:bg-gray-50"
             onClick={() => navigate("/booking")}
           >
             <div className="flex items-center gap-2">
@@ -60,8 +65,8 @@ const Profile = () => {
               <IoIosArrowForward className="w-10 h-5 text-gray-600" />
             </div>
           </div>
-          <div 
-            className="flex items-center gap-2 p-3 justify-between cursor-pointer hover:bg-gray-50" 
+          <div
+            className="flex items-center gap-2 p-3 justify-between cursor-pointer hover:bg-gray-50"
             onClick={handleLogout}
           >
             <div className="flex items-center gap-2">
