@@ -5,10 +5,9 @@ import { useUserById } from "../hook/user";
 const HeadInfoAccount = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-    const { data } = useUserById();
-  
-  console.log('user', user);
-  
+  const { data } = useUserById();
+
+
   return (
     <div className="sticky top-0 left-0 right-0 z-50 ">
       <div className="flex items-center justify-between gap-2 p-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-b-md">

@@ -10,7 +10,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
   const { data } = useUserById();
-  console.log("data", data);
+  // console.log("data", data);
 
   const handleLogout = () => {
     logout();

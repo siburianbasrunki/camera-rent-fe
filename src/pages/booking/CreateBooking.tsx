@@ -29,7 +29,7 @@ export const CreateBooking = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Booking data:", bookingData);
+    // console.log("Booking data:", bookingData);
     window.location.href = "/booking/history";
   };
 
