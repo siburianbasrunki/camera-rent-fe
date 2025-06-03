@@ -35,7 +35,7 @@ export const BookingDetail = () => {
             }
           },
         });
-      }, 30000); // Check every 30 seconds
+      }, 30000); 
 
       return () => clearInterval(interval);
     }

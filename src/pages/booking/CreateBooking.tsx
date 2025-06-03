@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { FaCalendarAlt, FaClock, FaArrowLeft, FaMoneyBillWave, FaQrcode } from "react-icons/fa";
+import {
+  FaCalendarAlt,
+  FaClock,
+  FaArrowLeft,
+  FaMoneyBillWave,
+  FaQrcode,
+} from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -35,25 +41,28 @@ export const CreateBooking = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!user) {
       navigate("/login");
       return;
     }
 
     const dateTime = new Date(`${bookingData.date}T${bookingData.time}:00`);
-    
-    createBooking({
-      cameraId: bookingData.cameraId,
-      date: dateTime.toISOString(),
-      duration: bookingData.duration,
-      purpose: bookingData.purpose,
-      paymentMethod: bookingData.paymentMethod as "BANK_TRANSFER" | "QRIS",
-    }, {
-      onSuccess: () => {
-        navigate("/booking");
+
+    createBooking(
+      {
+        cameraId: bookingData.cameraId,
+        date: dateTime.toISOString(),
+        duration: bookingData.duration,
+        purpose: bookingData.purpose,
+        paymentMethod: bookingData.paymentMethod as "BANK_TRANSFER" | "QRIS",
+      },
+      {
+        onSuccess: () => {
+          navigate("/booking");
+        },
       }
-    });
+    );
   };
 
   useEffect(() => {
@@ -97,7 +106,7 @@ export const CreateBooking = () => {
                   onChange={handleInputChange}
                   className="w-full p-3 border rounded-lg pl-10 focus:ring-2 focus:ring-indigo-500"
                   required
-                  min={new Date().toISOString().split('T')[0]}
+                  min={new Date().toISOString().split("T")[0]}
                 />
                 <FaCalendarAlt className="absolute left-3 top-3.5 text-gray-400" />
               </div>
@@ -121,13 +130,13 @@ export const CreateBooking = () => {
 
           <div>
             <label className="block text-sm font-medium mb-1">
-              Durasi (jam)
+              Durasi (hari) 
             </label>
             <input
               type="number"
               name="duration"
               min="1"
-              max="8"
+              max="30"
               value={bookingData.duration}
               onChange={handleInputChange}
               className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-indigo-500"
