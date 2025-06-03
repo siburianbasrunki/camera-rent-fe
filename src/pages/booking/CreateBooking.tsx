@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
-import { FaCalendarAlt, FaClock, FaArrowLeft } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaCalendarAlt, FaClock, FaArrowLeft, FaMoneyBillWave, FaQrcode } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import { useCreateBooking } from "../../hook/booking";
 
 export const CreateBooking = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const camera = location.state?.camera;
+  const { mutate: createBooking, isPending } = useCreateBooking();
 
   const [bookingData, setBookingData] = useState({
-    cameraType: camera?.name || "",
+    cameraId: camera?.id || "",
     date: "",
     time: "",
     duration: 1,
     purpose: "",
+    paymentMethod: "BANK_TRANSFER",
   });
 
   const handleInputChange = (
@@ -29,21 +35,38 @@ export const CreateBooking = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log("Booking data:", bookingData);
-    window.location.href = "/booking/history";
+    
+    if (!user) {
+      navigate("/login");
+      return;
+    }
+
+    const dateTime = new Date(`${bookingData.date}T${bookingData.time}:00`);
+    
+    createBooking({
+      cameraId: bookingData.cameraId,
+      date: dateTime.toISOString(),
+      duration: bookingData.duration,
+      purpose: bookingData.purpose,
+      paymentMethod: bookingData.paymentMethod as "BANK_TRANSFER" | "QRIS",
+    }, {
+      onSuccess: () => {
+        navigate("/booking");
+      }
+    });
   };
 
   useEffect(() => {
     if (!camera) {
-      window.location.href = "/camera";
+      navigate("/cameras");
     }
-  }, [camera]);
+  }, [camera, navigate]);
 
   return (
     <div className="min-h-screen bg-white p-4">
       <div className="max-w-md mx-auto">
         <div className="flex items-center mb-6">
-          <Link to="/camera" className="mr-4">
+          <Link to="/cameras" className="mr-4">
             <FaArrowLeft className="text-lg" />
           </Link>
           <h1 className="text-2xl font-bold">Buat Booking Baru</h1>
@@ -57,7 +80,7 @@ export const CreateBooking = () => {
             <input
               type="text"
               name="cameraType"
-              value={bookingData.cameraType}
+              value={camera?.name || ""}
               readOnly
               className="w-full p-3 border rounded-lg bg-gray-100 text-gray-700 cursor-not-allowed"
             />
@@ -74,6 +97,7 @@ export const CreateBooking = () => {
                   onChange={handleInputChange}
                   className="w-full p-3 border rounded-lg pl-10 focus:ring-2 focus:ring-indigo-500"
                   required
+                  min={new Date().toISOString().split('T')[0]}
                 />
                 <FaCalendarAlt className="absolute left-3 top-3.5 text-gray-400" />
               </div>
@@ -126,11 +150,44 @@ export const CreateBooking = () => {
             />
           </div>
 
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Metode Pembayaran
+            </label>
+            <div className="space-y-2">
+              <label className="flex items-center p-3 border rounded-lg cursor-pointer">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="BANK_TRANSFER"
+                  checked={bookingData.paymentMethod === "BANK_TRANSFER"}
+                  onChange={handleInputChange}
+                  className="mr-2"
+                />
+                <FaMoneyBillWave className="mr-2 text-blue-500" />
+                <span>Bank Transfer</span>
+              </label>
+              <label className="flex items-center p-3 border rounded-lg cursor-pointer">
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="QRIS"
+                  checked={bookingData.paymentMethod === "QRIS"}
+                  onChange={handleInputChange}
+                  className="mr-2"
+                />
+                <FaQrcode className="mr-2 text-green-500" />
+                <span>QRIS</span>
+              </label>
+            </div>
+          </div>
+
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition font-medium"
+            disabled={isPending}
+            className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition font-medium disabled:bg-indigo-300"
           >
-            Buat Booking
+            {isPending ? "Memproses..." : "Buat Booking"}
           </button>
         </form>
       </div>

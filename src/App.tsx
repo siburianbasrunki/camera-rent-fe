@@ -19,6 +19,7 @@ import { RegisterPage } from "./pages/register";
 import { OtpPage } from "./pages/otp";
 import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { BookingDetail } from "./pages/booking/BookingDetails";
 
 const queryClient = new QueryClient();
 
@@ -76,6 +77,14 @@ const AppContent = () => {
             element={
               <ProtectedRoute>
                 <CreateBooking />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/booking/detail/:id"
+            element={
+              <ProtectedRoute>
+                <BookingDetail />
               </ProtectedRoute>
             }
           />

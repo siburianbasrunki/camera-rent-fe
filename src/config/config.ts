@@ -7,5 +7,6 @@ export function getEndpoints() {
     banner: `${BASE_URL}/banner`,
     auth: `${BASE_URL}/auth`,
     user: `${BASE_URL}/users`,
+    booking: `${BASE_URL}/booking`,
   };
 }

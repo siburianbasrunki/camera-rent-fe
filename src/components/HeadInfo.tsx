@@ -4,9 +4,10 @@ import { useUserById } from "../hook/user";
 
 const HeadInfoAccount = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, setToken, token } = useAuth();
   const { data } = useUserById();
-
+  console.log(`token: ${token}`);
+  console.log(`setToken: ${setToken}`);
 
   return (
     <div className="sticky top-0 left-0 right-0 z-50 ">

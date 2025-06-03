@@ -19,7 +19,9 @@ interface User {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token")
+  );
   const [user, setUser] = useState<User | null>(() => {
     const userData = localStorage.getItem("user");
     return userData ? JSON.parse(userData) : null;
@@ -27,6 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [email, setEmail] = useState("");
 
   const handleSetToken = (newToken: string | null) => {
+    console.log("Storing token:", newToken); 
     if (newToken) {
       localStorage.setItem("token", newToken);
     } else {
@@ -34,7 +37,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
     setToken(newToken);
   };
-
   const handleSetUser = (newUser: User | null) => {
     if (newUser) {
       localStorage.setItem("user", JSON.stringify(newUser));
