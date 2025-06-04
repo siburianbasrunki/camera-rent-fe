@@ -77,7 +77,7 @@ export const BookingHistory = () => {
           <div className="text-center py-10">
             <p className="text-gray-500">Anda belum memiliki booking</p>
             <Link
-              to="/cameras"
+              to="/camera"
               className="text-indigo-600 hover:underline mt-2 inline-block"
             >
               Booking kamera sekarang

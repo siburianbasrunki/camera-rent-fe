@@ -14,6 +14,7 @@ import {
   useCancelBooking,
   useCheckPaymentStatus,
 } from "../../hook/booking";
+import { useConfirmation } from "../../components/PopUp";
 
 export const BookingDetail = () => {
   const { id } = useParams();
@@ -23,7 +24,7 @@ export const BookingDetail = () => {
     useCheckPaymentStatus();
   const { mutate: cancelBooking, isPending: isCancelling } = useCancelBooking();
   const [paymentStatus, setPaymentStatus] = useState<any>(null);
-
+  const {showConfirmation} = useConfirmation();
   useEffect(() => {
     if (booking?.payment?.status === "PENDING" && !paymentStatus) {
       const interval = setInterval(() => {
@@ -50,16 +51,15 @@ export const BookingDetail = () => {
     });
   };
 
-  const handleCancelBooking = () => {
-    if (
-      !booking ||
-      !confirm("Apakah Anda yakin ingin membatalkan booking ini?")
-    )
-      return;
-    cancelBooking(booking.id, {
-      onSuccess: () => {
-        navigate("/booking");
-      },
+   const handleCancelBooking = () => {
+    if (!booking) return;
+    
+    showConfirmation("Apakah Anda yakin ingin membatalkan booking ini?", () => {
+      cancelBooking(booking.id, {
+        onSuccess: () => {
+          navigate("/booking");
+        },
+      });
     });
   };
 

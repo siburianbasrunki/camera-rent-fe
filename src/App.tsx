@@ -20,6 +20,7 @@ import { OtpPage } from "./pages/otp";
 import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { BookingDetail } from "./pages/booking/BookingDetails";
+import { ConfirmationProvider } from "./components/PopUp";
 
 const queryClient = new QueryClient();
 
@@ -115,9 +116,11 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Router>
-          <AppContent />
-        </Router>
+        <ConfirmationProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </ConfirmationProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

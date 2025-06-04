@@ -5,16 +5,19 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useUserById } from "../../hook/user";
+import { useConfirmation } from "../../components/PopUp";
 
 const Profile = () => {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
   const { data } = useUserById();
-  // console.log("data", data);
+  const { showConfirmation } = useConfirmation();
 
   const handleLogout = () => {
-    logout();
-    navigate("/login", { replace: true });
+    showConfirmation("Apakah Anda yakin ingin logout?", () => {
+      logout();
+      navigate("/login", { replace: true });
+    });
   };
 
   return (
