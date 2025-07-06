@@ -30,7 +30,7 @@ export const CameraSection = () => {
         {cameras?.length === 0 ? (
           <EmptyState title="Tidak ada data camera tersimpan" />
         ) : (
-          cameras?.map((camera) => (
+          cameras?.slice(0, 3).map((camera) => (
             <div
               key={camera.id}
               className="bg-white rounded-2xl shadow hover:shadow-lg transition duration-300 border border-gray-200 flex flex-col"
