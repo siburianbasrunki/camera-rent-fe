@@ -24,7 +24,7 @@ export const BookingDetail = () => {
     useCheckPaymentStatus();
   const { mutate: cancelBooking, isPending: isCancelling } = useCancelBooking();
   const [paymentStatus, setPaymentStatus] = useState<any>(null);
-  const {showConfirmation} = useConfirmation();
+  const { showConfirmation } = useConfirmation();
   useEffect(() => {
     if (booking?.payment?.status === "PENDING" && !paymentStatus) {
       const interval = setInterval(() => {
@@ -36,7 +36,7 @@ export const BookingDetail = () => {
             }
           },
         });
-      }, 30000); 
+      }, 30000);
 
       return () => clearInterval(interval);
     }
@@ -51,9 +51,9 @@ export const BookingDetail = () => {
     });
   };
 
-   const handleCancelBooking = () => {
+  const handleCancelBooking = () => {
     if (!booking) return;
-    
+
     showConfirmation("Apakah Anda yakin ingin membatalkan booking ini?", () => {
       cancelBooking(booking.id, {
         onSuccess: () => {
@@ -276,6 +276,26 @@ export const BookingDetail = () => {
                   )}
                 </div>
               </div>
+            </div>
+          )}
+          {booking.status === "PAID" && (
+            <div style={{ marginTop: "20px" }}>
+              {/* button pengembalian barang */}
+              <button
+                style={{
+                  backgroundColor: "#007BFF",
+                  color: "white",
+                  padding: "10px 20px",
+                  borderRadius: "5px",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  navigate(`/return/${booking.id}`);
+                }}
+              >
+                Pengembalian Barang
+              </button>
             </div>
           )}
         </div>

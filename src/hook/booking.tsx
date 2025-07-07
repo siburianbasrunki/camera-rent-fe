@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext";
 import BookingService from "../service/booking";
+import { useNavigate } from "react-router-dom";
 
 export const useCreateBooking = () => {
   const queryClient = useQueryClient();
@@ -41,6 +42,20 @@ export const useCancelBooking = () => {
     mutationFn: BookingService.cancelBooking,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bookings'] });
+    },
+  });
+};
+
+export const useProcessReturn = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+  
+  return useMutation({
+    mutationFn: ({ bookingId, formData }: { bookingId: string, formData: FormData }) => 
+      BookingService.processReturn(bookingId, formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      navigate("/booking");
     },
   });
 };

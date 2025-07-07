@@ -10,6 +10,8 @@ export interface Booking {
   userId: string;
   cameraId: string;
   date: Date | string;
+  startDate: Date | string;
+  endDate: Date | string;
   duration: number;
   purpose: string;
   status: BookingStatus;

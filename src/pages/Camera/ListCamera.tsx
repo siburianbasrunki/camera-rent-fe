@@ -40,14 +40,14 @@ const CameraListPage = () => {
         />
       </div>
 
-      <div className="grid grid-cols-1 gap-6">
+      <div className="grid grid-cols-1 gap-6 ">
         {cameras?.length === 0 ? (
           <EmptyState title="Tidak ada kamera ditemukan" />
         ) : (
           cameras?.map((camera) => (
             <div
               key={camera.id}
-              className="border border-gray-300 rounded-lg overflow-hidden shadow hover:shadow-lg transition"
+              className="border border-gray-300 rounded-lg overflow-hidden shadow hover:shadow-lg transition "
             >
               <div className="flex gap-4 p-4">
                 <img
@@ -62,7 +62,7 @@ const CameraListPage = () => {
                   </p>
                   <button
                     onClick={() => navigate(`/camera/${camera.id}`)}
-                    className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm"
+                    className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm w-fit"
                   >
                     Detail 
                   </button>

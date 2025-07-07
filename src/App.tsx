@@ -21,6 +21,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { BookingDetail } from "./pages/booking/BookingDetails";
 import { ConfirmationProvider } from "./components/PopUp";
+import { ReturnCamera } from "./pages/booking/ReturnCameraBook";
 
 const queryClient = new QueryClient();
 
@@ -86,6 +87,14 @@ const AppContent = () => {
             element={
               <ProtectedRoute>
                 <BookingDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/return/:id"
+            element={
+              <ProtectedRoute>
+                <ReturnCamera />
               </ProtectedRoute>
             }
           />

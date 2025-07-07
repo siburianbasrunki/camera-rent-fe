@@ -1,30 +1,41 @@
 import { getEndpoints } from "../config/config";
-import type { Booking, PaymentMethod } from "../model/booking";
+import type { Booking } from "../model/booking";
 
-interface CreateBookingData {
-  cameraId: string;
-  date: string;
-  duration: number;
-  purpose: string;
-  paymentMethod: PaymentMethod;
-}
+// interface CreateBookingData {
+//   cameraId: string;
+//   date: string;
+//   duration: number;
+//   purpose: string;
+//   paymentMethod: PaymentMethod;
+// }
 
 const BookingService = {
-  async createBooking(data: CreateBookingData): Promise<Booking> {
+  async createBooking(data: FormData): Promise<Booking> {
     const { booking } = getEndpoints();
     const res = await fetch(booking, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
         "Authorization": `Bearer ${localStorage.getItem("token")}`,
       },
-      body: JSON.stringify(data),
+      body: data,
     });
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const json = await res.json();
     return json.data;
   },
-
+async processReturn(bookingId: string, returnProof: FormData): Promise<Booking> {
+    const { booking } = getEndpoints();
+    const res = await fetch(`${booking}/${bookingId}/return`, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: returnProof,
+    });
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const json = await res.json();
+    return json.data;
+  },
   async getUserBookings(): Promise<Booking[]> {
     const { booking } = getEndpoints();
     const res = await fetch(booking, {
