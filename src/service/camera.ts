@@ -4,9 +4,19 @@ import type { Camera, DetailCamera } from "../model/camera";
 const CameraService = {
   async getCameras(searchTerm?: string): Promise<Camera[]> {
     const { camera } = getEndpoints();
-    const url = searchTerm ? `${camera}?search=${searchTerm}` : camera;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const url = new URL(camera);
+
+    if (searchTerm) {
+      url.searchParams.append("search", searchTerm);
+    }
+
+    const res = await fetch(url.toString());
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.message || `HTTP error! status: ${res.status}`);
+    }
+
     const json = await res.json();
     return json.data || [];
   },

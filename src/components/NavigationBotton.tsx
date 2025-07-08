@@ -9,8 +9,8 @@ import { MdCreditCard } from "react-icons/md";
 
 const BottomNav = () => {
   return (
-    <div className="sticky bottom-0 left-0 right-0 z-50">
-      <div className="max-w-md mx-auto px-4 pb-4">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white">
+      <div className="max-w-md mx-auto w-full px-4 pb-4">
         <div className="relative">
           <div className="bg-white rounded-full shadow-xl p-2 flex justify-around items-center">
             <Link to="/" className="p-2 text-gray-600 hover:text-indigo-600">

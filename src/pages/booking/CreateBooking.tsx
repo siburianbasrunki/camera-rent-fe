@@ -1,19 +1,26 @@
-import { useEffect, useState } from "react";
-import { FaCalendarAlt, FaArrowLeft, FaMoneyBillWave, FaQrcode, FaIdCard } from "react-icons/fa";
+import {  useState } from "react";
+import {
+  FaCalendarAlt,
+  FaArrowLeft,
+  FaMoneyBillWave,
+  FaQrcode,
+  FaIdCard,
+  FaSpinner,
+} from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useCreateBooking } from "../../hook/booking";
+import { useCameraById } from "../../hook/camera";
 
 export const CreateBooking = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const camera = location.state?.camera;
+  // const camera = location.state?.camera;
   const { mutate: createBooking, isPending } = useCreateBooking();
+  const { data: cameraDetail, isLoading } = useCameraById();
 
   const [bookingData, setBookingData] = useState({
-    cameraId: camera?.id || "",
+    cameraId: cameraDetail?.id || "",
     startDate: "",
     endDate: "",
     purpose: "",
@@ -23,7 +30,9 @@ export const CreateBooking = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value } = e.target;
     setBookingData({
@@ -68,12 +77,14 @@ export const CreateBooking = () => {
     });
   };
 
-  useEffect(() => {
-    if (!camera) {
-      navigate("/camera");
-    }
-  }, [camera, navigate]);
-
+  
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-white p-4 flex justify-center items-center">
+        <FaSpinner className="animate-spin text-2xl text-indigo-600" />
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen bg-white p-4">
       <div className="max-w-md mx-auto">
@@ -92,7 +103,7 @@ export const CreateBooking = () => {
             <input
               type="text"
               name="cameraType"
-              value={camera?.name || ""}
+              value={cameraDetail?.name || ""}
               readOnly
               className="w-full p-3 border rounded-lg bg-gray-100 text-gray-700 cursor-not-allowed"
             />
@@ -100,7 +111,9 @@ export const CreateBooking = () => {
 
           <div className="grid grid-cols-1 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-1">Tanggal Mulai</label>
+              <label className="block text-sm font-medium mb-1">
+                Tanggal Mulai
+              </label>
               <div className="relative">
                 <input
                   type="date"
@@ -116,7 +129,9 @@ export const CreateBooking = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1">Tanggal Selesai</label>
+              <label className="block text-sm font-medium mb-1">
+                Tanggal Selesai
+              </label>
               <div className="relative">
                 <input
                   type="date"
@@ -125,7 +140,10 @@ export const CreateBooking = () => {
                   onChange={handleInputChange}
                   className="w-full p-3 border rounded-lg pl-10 focus:ring-2 focus:ring-indigo-500"
                   required
-                  min={bookingData.startDate || new Date().toISOString().split("T")[0]}
+                  min={
+                    bookingData.startDate ||
+                    new Date().toISOString().split("T")[0]
+                  }
                 />
                 <FaCalendarAlt className="absolute left-3 top-3.5 text-gray-400" />
               </div>
@@ -154,9 +172,9 @@ export const CreateBooking = () => {
             <div className="border-2 border-dashed rounded-lg p-4 text-center">
               {previewUrl ? (
                 <div className="mb-2">
-                  <img 
-                    src={previewUrl} 
-                    alt="Identity preview" 
+                  <img
+                    src={previewUrl}
+                    alt="Identity preview"
                     className="max-h-40 mx-auto mb-2"
                   />
                   <button

@@ -33,88 +33,90 @@ const AppContent = () => {
     location.pathname === "/otp";
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="max-w-md mx-auto min-h-screen flex flex-col shadow-xl">
-        <Routes>
-          {/* Public Routes - tidak perlu login */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/otp" element={<OtpPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+    <div className="min-h-screen bg-white flex flex-col">
+      <div className="max-w-md mx-auto w-full flex-1 flex flex-col shadow-xl relative">
+        <main className="flex-1 overflow-y-auto">
+          <Routes>
+            {/* Public Routes - tidak perlu login */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/otp" element={<OtpPage />} />
+            <Route path="/register" element={<RegisterPage />} />
 
-          {/* Protected Routes - semua route lainnya */}
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/camera"
-            element={
-              <ProtectedRoute>
-                <CameraListPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/camera/:id"
-            element={
-              <ProtectedRoute>
-                <CameraDetail />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/booking/*"
-            element={
-              <ProtectedRoute>
-                <BookingPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/booking/:id"
-            element={
-              <ProtectedRoute>
-                <CreateBooking />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/booking/detail/:id"
-            element={
-              <ProtectedRoute>
-                <BookingDetail />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/return/:id"
-            element={
-              <ProtectedRoute>
-                <ReturnCamera />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/balance"
-            element={
-              <ProtectedRoute>
-                <BalancePage />
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
+            {/* Protected Routes - semua route lainnya */}
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/camera"
+              element={
+                <ProtectedRoute>
+                  <CameraListPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/camera/:id"
+              element={
+                <ProtectedRoute>
+                  <CameraDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/booking/*"
+              element={
+                <ProtectedRoute>
+                  <BookingPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/booking/:id"
+              element={
+                <ProtectedRoute>
+                  <CreateBooking />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/booking/detail/:id"
+              element={
+                <ProtectedRoute>
+                  <BookingDetail />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/return/:id"
+              element={
+                <ProtectedRoute>
+                  <ReturnCamera />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/balance"
+              element={
+                <ProtectedRoute>
+                  <BalancePage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </main>
         {!hideBottomNav && <BottomNav />}
       </div>
     </div>

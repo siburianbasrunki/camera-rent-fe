@@ -4,8 +4,9 @@ import { useParams } from "react-router-dom";
 
 export const useCamera = (searchTerm?: string) => {
   return useQuery({
-    queryKey: ['cameras', searchTerm],
+    queryKey: ['cameras', { search: searchTerm }], 
     queryFn: () => CameraService.getCameras(searchTerm),
+    staleTime: 30000, 
   });
 };
 
