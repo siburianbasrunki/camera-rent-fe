@@ -6,3 +6,10 @@ export interface UserModel {
     role: string;
     imageUrl: string;
 }
+
+export interface UpdateUserPayload {
+  name?: string;
+  phoneNumber?: string;
+  role?: string;
+  image?: File | null;
+}

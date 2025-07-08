@@ -9,6 +9,16 @@ const UserService = {
     const json = await res.json();
     return json.data;
   },
+  async updateUser(id: string, payload: FormData): Promise<UserModel> {
+    const { user } = getEndpoints();
+    const res = await fetch(`${user}/${id}`, {
+      method: "PATCH",
+      body: payload,
+    });
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const json = await res.json();
+    return json.data;
+  },
 };
 
 export default UserService;
