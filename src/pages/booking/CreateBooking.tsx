@@ -86,6 +86,7 @@ export const CreateBooking = () => {
     );
   }
   return (
+    <>
     <div className="min-h-screen bg-white p-4">
       <div className="max-w-md mx-auto">
         <div className="flex items-center mb-6">
@@ -250,5 +251,7 @@ export const CreateBooking = () => {
         </form>
       </div>
     </div>
+    <div className="mb-[90px]"></div>
+    </>
   );
 };

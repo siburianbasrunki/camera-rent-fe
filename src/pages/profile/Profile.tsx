@@ -1,5 +1,5 @@
 import { BiSolidEdit } from "react-icons/bi";
-import { FaClipboardList } from "react-icons/fa";
+import { FaClipboardList, FaSpinner } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import { IoLogOutOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,7 @@ import EditProfileModal from "./editProfile";
 const Profile = () => {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
-  const { data } = useUserById();
+  const { data ,isLoading} = useUserById();
   const { showConfirmation } = useConfirmation();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const handleLogout = () => {
@@ -21,6 +21,14 @@ const Profile = () => {
       navigate("/login", { replace: true });
     });
   };
+   if (isLoading) {
+      return (
+        <div className="min-h-screen bg-white p-4 flex justify-center items-center">
+          <FaSpinner className="animate-spin text-2xl text-indigo-600" />
+        </div>
+      );
+    }
+  
 
   return (
     <>

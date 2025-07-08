@@ -69,6 +69,7 @@ export const BookingHistory = () => {
   };
 
   return (
+    <>
     <div className="min-h-screen bg-white p-4">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-2xl font-bold mb-6">Riwayat Booking</h1>
@@ -148,5 +149,8 @@ export const BookingHistory = () => {
         )}
       </div>
     </div>
+          <div className="mb-[90px]"></div>
+
+    </>
   );
 };
