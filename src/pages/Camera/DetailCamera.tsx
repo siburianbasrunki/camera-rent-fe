@@ -2,12 +2,43 @@ import { useNavigate } from "react-router-dom";
 import { formatRupiah } from "../../helper/formatRupiah";
 import { useCameraById } from "../../hook/camera";
 import { EmptyState } from "../../components/EmptyState";
-import { FaSpinner } from "react-icons/fa";
+import { FaArrowLeft, FaSpinner } from "react-icons/fa";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const CameraDetail = () => {
   const { data: camera, isLoading, isError, error } = useCameraById();
-
   const navigate = useNavigate();
+
+  const allImages = [
+    {
+      id: "main-image",
+      imageUrl: camera?.imageUrl,
+      isMain: true,
+    },
+    ...(camera?.cameraPhoto?.map((photo) => ({
+      id: photo.id,
+      imageUrl: photo.imageUrl,
+      isMain: false,
+    })) || []),
+  ];
+
+  console.log("allImages:", allImages);
+
+  const settings = {
+    dots: true,
+    className: "center",
+    centerMode: true,
+    centerPadding: "60px",
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: true,
+    adaptiveHeight: true,
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-white p-4 flex justify-center items-center">
@@ -15,25 +46,50 @@ const CameraDetail = () => {
       </div>
     );
   }
+
   if (isError) return <EmptyState title={error.message} />;
 
   return (
     <div className="p-4 max-w-md mx-auto min-h-screen">
-      <img
-        src={camera?.imageUrl}
-        alt={camera?.name}
-        className="w-full h-64 object-cover rounded-xl mb-4"
-      />
+      <button
+        onClick={() => navigate("/booking")}
+        className="flex items-center text-indigo-600 mb-4 cursor-pointer"
+      >
+        <FaArrowLeft className="mr-2" />
+        Kembali
+      </button>
+
+      <div className="mb-4 rounded-xl overflow-hidden">
+        <Slider {...settings}>
+          {allImages.map((image) => (
+            <div key={image.id} className="relative">
+              <img
+                src={image.imageUrl}
+                alt={camera?.name}
+                className="w-full h-64 object-cover"
+              />
+              {image.isMain && (
+                <span className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded">
+                  Main Image
+                </span>
+              )}
+            </div>
+          ))}
+        </Slider>
+      </div>
+
       <h1 className="text-2xl font-bold text-gray-800">{camera?.name}</h1>
       <p className="text-gray-600 mt-2">
         {formatRupiah(camera?.price || 0)} / day
       </p>
+
       <h2 className="mt-6 text-xl font-semibold text-gray-800">Ciri-ciri:</h2>
       <ul className="mt-2 list-disc list-inside text-gray-700 space-y-1">
         {camera?.ciri_ciri.map((item, index) => (
           <li key={index}>{item.ciri}</li>
         ))}
       </ul>
+
       <button
         onClick={() =>
           navigate(`/booking/${camera?.id}`, { state: { camera } })

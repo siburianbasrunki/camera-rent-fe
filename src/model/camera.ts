@@ -31,4 +31,9 @@ export interface DetailCamera {
   ciri_ciri: {
     ciri: string;
   }[];
+  cameraPhoto: {
+    id: string;
+    imageUrl: string;
+    imageId: string;
+  }[];
 }
