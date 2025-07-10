@@ -21,6 +21,8 @@ export interface Booking {
   camera: Camera;
   payment?: Payment;
   user?: User;
+  isReturned?: boolean;
+  hasReturnProof?: boolean;
 }
 
 export interface Payment {

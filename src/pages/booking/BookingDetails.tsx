@@ -6,6 +6,7 @@ import {
   FaQrcode,
   FaSpinner,
   FaArrowLeft,
+  FaRegCopy,
 } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
@@ -22,6 +23,7 @@ export const BookingDetail = () => {
   const { data: booking, isLoading } = useBookingById(id || "");
   const { mutate: checkPayment, isPending: isCheckingPayment } =
     useCheckPaymentStatus();
+  const [copied, setCopied] = useState(false);
   const { mutate: cancelBooking, isPending: isCancelling } = useCancelBooking();
   const [paymentStatus, setPaymentStatus] = useState<any>(null);
   const { showConfirmation } = useConfirmation();
@@ -87,7 +89,7 @@ export const BookingDetail = () => {
       <div className="max-w-2xl mx-auto">
         <button
           onClick={() => navigate("/booking")}
-          className="flex items-center text-indigo-600 mb-4"
+          className="flex items-center text-indigo-600 mb-4 cursor-pointer"
         >
           <FaArrowLeft className="mr-2" />
           Kembali
@@ -99,6 +101,9 @@ export const BookingDetail = () => {
           <div className="flex justify-between items-start mb-6">
             <div>
               <h2 className="font-medium text-xl">{booking.camera.name}</h2>
+              {/* <h3 className="font-bold text-lg  text-gray-500">
+                Rp{booking.totalPrice.toLocaleString()}
+              </h3> */}
               <div className="flex items-center mt-2 text-gray-500">
                 <FaCalendarAlt className="mr-2" />
                 <span>
@@ -120,27 +125,24 @@ export const BookingDetail = () => {
               </div>
             </div>
             <div className="text-right">
-              <div className="font-bold text-lg">
-                Rp{booking.totalPrice.toLocaleString()}
-              </div>
               <div className="mt-2">
                 {currentStatus === "PENDING" && (
-                  <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
+                  <span className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm outline outline-yellow-800">
                     Menunggu Pembayaran
                   </span>
                 )}
                 {currentStatus === "settlement" && (
-                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
+                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm outline outline-green-800">
                     Dibayar
                   </span>
                 )}
                 {currentStatus === "expired" && (
-                  <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">
+                  <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm outline outline-red-800">
                     Kadaluarsa
                   </span>
                 )}
                 {booking.status === "CANCELLED" && (
-                  <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm">
+                  <span className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm outline outline-red-800">
                     Dibatalkan
                   </span>
                 )}
@@ -157,53 +159,82 @@ export const BookingDetail = () => {
             <div className="border-t pt-6">
               <h3 className="font-medium mb-4">Detail Pembayaran</h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <div className="flex items-center mb-2">
-                    {booking.payment.paymentMethod === "BANK_TRANSFER" ? (
-                      <FaMoneyBillWave className="text-blue-500 mr-2" />
-                    ) : (
-                      <FaQrcode className="text-green-500 mr-2" />
-                    )}
-                    <span>
-                      {booking.payment.paymentMethod === "BANK_TRANSFER"
-                        ? "Bank Transfer"
-                        : "QRIS"}
-                    </span>
-                  </div>
-
-                  {booking.payment.paymentMethod === "BANK_TRANSFER" && (
-                    <div className="mt-4">
-                      <h4 className="font-medium mb-2">
-                        Nomor Virtual Account
-                      </h4>
-                      <div className="bg-gray-100 p-3 rounded-lg font-mono text-lg">
-                        {booking.payment.paymentCode}
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+                {currentStatus !== "SETTLED" &&
+                  currentStatus !== "EXPIRED" &&
+                  currentStatus !== "CANCELLED" && (
+                    <div>
+                      <div className="flex items-center mb-2">
+                        {booking.payment.paymentMethod === "BANK_TRANSFER" ? (
+                          <FaMoneyBillWave className="text-blue-500 mr-2" />
+                        ) : (
+                          <FaQrcode className="text-green-500 mr-2" />
+                        )}
+                        <span>
+                          {booking.payment.paymentMethod === "BANK_TRANSFER"
+                            ? "Bank Transfer BCA (Bank Central Asia)"
+                            : "QRIS"}
+                        </span>
                       </div>
-                      <p className="text-sm text-gray-500 mt-2">
-                        Gunakan nomor ini untuk melakukan pembayaran melalui
-                        ATM/mobile banking
-                      </p>
+
+                      {booking.payment.paymentMethod === "BANK_TRANSFER" && (
+                        <div className="mt-4">
+                          <h4 className="font-medium mb-2">
+                            Nomor Virtual Account
+                          </h4>
+                          <div className="bg-gray-100 p-3 rounded-lg font-mono text-lg flex items-center gap-3">
+                            {booking.payment.paymentCode}
+
+                            <FaRegCopy
+                              className={`text-gray-500 cursor-pointer ${
+                                copied ? "text-green-500" : ""
+                              }`}
+                              onClick={async () => {
+                                try {
+                                  await navigator.clipboard.writeText(
+                                    booking.payment
+                                      ? booking.payment.paymentCode || ""
+                                      : ""
+                                  );
+                                  setCopied(true);
+                                  setTimeout(() => setCopied(false), 2000);
+                                } catch (err) {
+                                  console.error("Failed to copy:", err);
+                                }
+                              }}
+                            />
+                          </div>
+                          {copied && (
+                            <p className="text-sm text-green-500 mt-2">
+                              Nomor virtual account berhasil disalin
+                            </p>
+                          )}
+                          <p className="text-sm text-gray-500 mt-2">
+                            Gunakan nomor ini untuk melakukan pembayaran melalui
+                            ATM/mobile banking
+                          </p>
+                        </div>
+                      )}
+
+                      {booking.payment.paymentMethod === "QRIS" && (
+                        <div className="mt-4">
+                          <h4 className="font-medium mb-2">
+                            QR Code Pembayaran
+                          </h4>
+                          <div className="bg-white p-4 rounded-lg border flex justify-center">
+                            <QRCode
+                              value={booking.payment.paymentCode || ""}
+                              size={180}
+                            />
+                          </div>
+                          <p className="text-sm text-gray-500 mt-2">
+                            Scan QR code ini menggunakan aplikasi mobile banking
+                            Anda
+                          </p>
+                        </div>
+                      )}
                     </div>
                   )}
-
-                  {booking.payment.paymentMethod === "QRIS" && (
-                    <div className="mt-4">
-                      <h4 className="font-medium mb-2">QR Code Pembayaran</h4>
-                      <div className="bg-white p-4 rounded-lg border flex justify-center">
-                        <QRCode
-                          value={booking.payment.paymentCode || ""}
-                          size={180}
-                        />
-                      </div>
-                      <p className="text-sm text-gray-500 mt-2">
-                        Scan QR code ini menggunakan aplikasi mobile banking
-                        Anda
-                      </p>
-                    </div>
-                  )}
-                </div>
-
                 <div>
                   <div className="space-y-3">
                     <div className="flex justify-between">
@@ -216,7 +247,7 @@ export const BookingDetail = () => {
                       <span className="text-gray-600">Metode Pembayaran</span>
                       <span>
                         {booking.payment.paymentMethod === "BANK_TRANSFER"
-                          ? "Bank Transfer"
+                          ? "Bank Transfer BCA "
                           : "QRIS"}
                       </span>
                     </div>
@@ -224,8 +255,9 @@ export const BookingDetail = () => {
                       <span className="text-gray-600">Status Pembayaran</span>
                       <span>
                         {currentStatus === "PENDING" && "Menunggu Pembayaran"}
-                        {currentStatus === "settlement" && "Berhasil"}
-                        {currentStatus === "expired" && "Kadaluarsa"}
+                        {currentStatus === "SETTLED" && "Berhasil"}
+                        {currentStatus === "EXPIRED" && "Kadaluarsa"}
+                        {currentStatus === "FAILED" && "Gagal"}
                       </span>
                     </div>
                     {booking.payment.expiryTime && (
@@ -278,9 +310,8 @@ export const BookingDetail = () => {
               </div>
             </div>
           )}
-          {booking.status === "PAID" && (
-            <div style={{ marginTop: "20px" }}>
-              {/* button pengembalian barang */}
+          {!booking.isReturned && currentStatus === "CANCELLED" && (
+            <div style={{ marginTop: "20px", marginBottom: "70px" }}>
               <button
                 style={{
                   backgroundColor: "#007BFF",
