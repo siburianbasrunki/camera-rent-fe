@@ -9,6 +9,8 @@ export const ReturnCamera = () => {
   const { data: booking, isLoading } = useBookingById(id || "");
   const [returnFile, setReturnFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [rating, setRating] = useState<number | null>(null);
+  const [comment, setComment] = useState<string>("");
   const { mutate: processReturn, isPending: isSubmitting } = useProcessReturn();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,6 +31,8 @@ export const ReturnCamera = () => {
 
     const formData = new FormData();
     formData.append("returnProof", returnFile);
+    formData.append("rating", rating?.toString() || "");
+    formData.append("comment", comment);
 
     if (id) {
       processReturn({ bookingId: id, formData });
@@ -136,11 +140,48 @@ export const ReturnCamera = () => {
               )}
             </div>
           </div>
+          <div className="mt-6">
+            <h3 className="text-lg font-medium mb-3">Review Kamera</h3>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Rating</label>
+              <div className="flex space-x-1">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setRating(star)}
+                    className={`text-2xl ${
+                      rating && star <= rating
+                        ? "text-yellow-400"
+                        : "text-gray-300"
+                    }`}
+                  >
+                    ★
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">
+                Komentar (opsional)
+              </label>
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                maxLength={200}
+                className="w-full border rounded-lg p-2 text-sm"
+                placeholder="Bagaimana pengalaman Anda menggunakan kamera ini?"
+              />
+              <p className="text-xs text-gray-500 text-right">
+                {comment.length}/200
+              </p>
+            </div>
+          </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition font-medium disabled:bg-indigo-300 flex items-center justify-center"
+            className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition font-medium disabled:bg-indigo-300 flex items-center justify-center mb-[80px]"
           >
             {isSubmitting ? (
               <>

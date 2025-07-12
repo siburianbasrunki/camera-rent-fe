@@ -37,3 +37,19 @@ export interface DetailCamera {
     imageId: string;
   }[];
 }
+
+export interface Review {
+  id: string;
+  bookingId: string;
+  cameraId: string;
+  userId: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
+  user: {
+    id: string;
+    name: string;
+    imageUrl?: string;
+  };
+  camera?: Camera;
+}

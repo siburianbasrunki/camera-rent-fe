@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { formatRupiah } from "../../helper/formatRupiah";
-import { useCameraById } from "../../hook/camera";
+import { useCameraById, useCameraReviews } from "../../hook/camera";
 import { EmptyState } from "../../components/EmptyState";
 import { FaArrowLeft, FaSpinner } from "react-icons/fa";
 import Slider from "react-slick";
@@ -9,6 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 const CameraDetail = () => {
   const { data: camera, isLoading, isError, error } = useCameraById();
+  const { data: reviews, isLoading: reviewsLoading } = useCameraReviews();
   const navigate = useNavigate();
 
   const allImages = [
@@ -98,6 +99,53 @@ const CameraDetail = () => {
       >
         Booking
       </button>
+
+      <div className="mt-8 mb-[80px] ">
+        <h2 className="text-xl font-semibold mb-4">Ulasan Pengguna</h2>
+
+        {reviewsLoading ? (
+          <div className="flex justify-center">
+            <FaSpinner className="animate-spin text-xl text-indigo-600" />
+          </div>
+        ) : reviews && reviews.length > 0 ? (
+          <div className="space-y-4">
+            {reviews.map((review) => (
+              <div key={review.id} className="border-b pb-4">
+                <div className="flex items-center mb-2">
+                  <img
+                    src={review.user.imageUrl || "/default-avatar.png"}
+                    alt={review.user.name}
+                    className="w-8 h-8 rounded-full mr-2"
+                  />
+                  <div>
+                    <p className="font-medium">{review.user.name}</p>
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <span
+                          key={i}
+                          className={
+                            i < review.rating
+                              ? "text-yellow-400"
+                              : "text-gray-300"
+                          }
+                        >
+                          ★
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-700 text-sm">{review.comment}</p>
+                <p className="text-gray-500 text-xs mt-1">
+                  {new Date(review.createdAt).toLocaleDateString("id-ID")}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-gray-500">Belum ada ulasan untuk kamera ini.</p>
+        )}
+      </div>
     </div>
   );
 };

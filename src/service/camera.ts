@@ -1,5 +1,5 @@
 import { getEndpoints } from "../config/config";
-import type { Camera, DetailCamera } from "../model/camera";
+import type { Camera, DetailCamera, Review } from "../model/camera";
 
 const CameraService = {
   async getCameras(searchTerm?: string): Promise<Camera[]> {
@@ -35,6 +35,21 @@ const CameraService = {
       method: "POST",
       body: formData,
     });
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const json = await res.json();
+    return json.data;
+  },
+  async getCameraReviews(cameraId: string): Promise<Review[]> {
+    const { camera } = getEndpoints();
+    const res = await fetch(`${camera}/${cameraId}/reviews`);
+    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+    const json = await res.json();
+    return json.data;
+  },
+
+  async getReviewById(reviewId: string): Promise<Review> {
+    const { camera } = getEndpoints();
+    const res = await fetch(`${camera}/reviews/${reviewId}`);
     if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
     const json = await res.json();
     return json.data;
